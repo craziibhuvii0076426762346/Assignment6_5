@@ -1,0 +1,32 @@
+1.TravelData = load '/user/acadgild/Desktop/TravelData.txt' using PigStorage('\t') as (CityPair:chararray, fromLocation:chararray, toLocation:chararray, Producttype:int, Adults:int, Seniors:int, Children:int, Youth:int, Infant:int, DateofTravel:chararray, TimeofTravel:chararray, DateofReturn:chararray, TimeofReturn:int, Price:float, Hotel:chararray);
+
+
+
+//line1 will load the dataset into the pig storage.
+
+2.group_source = group TravelData by fromLocation;
+
+
+//line 2 will group the data records based on source place.
+
+3.count_source = foreach group_source generate group, COUNT(TravelData.fromLocation)as cnt;
+
+
+
+//line 3 will iterate through the records to count the number of sources from where the people are coming from. 
+
+4.orderby = order count_source by cnt DESC; 
+
+
+
+//line 4 will order the count_source in descending order.
+
+5.top_source = limit orderby 20;
+
+
+//line 5 will generate the top 20 source locations.
+
+
+6.dump top_source;
+
+//line 6 will display the result
